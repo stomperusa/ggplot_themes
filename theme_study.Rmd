@@ -1,0 +1,60 @@
+---
+title: "Examples of Themes for GGPLOT2"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(ggthemes)
+library(stringr)
+library(hrbrthemes)
+library(cowplot)
+library(dplyr)
+library(crayon)
+library(glue)
+```
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+
+mtcars2 <- within(mtcars, {
+    vs <- factor(vs, labels = c("V-shaped", "Straight"))
+    am <- factor(am, labels = c("Automatic", "Manual"))
+    cyl  <- factor(cyl)
+    gear <- factor(gear)
+})
+
+
+p1 <- ggplot(mtcars2) +
+    geom_point(aes(x = wt, y = mpg, colour = gear)) +
+    labs(title = "Fuel economy declines as weight increases",
+         subtitle = "(1973-74)",
+         x = "Weight (1000 lbs)",
+         y = "Fuel economy (mpg)",
+         colour = "Gears")
+
+theme_packs <- c("ggplot2", "ggthemes", "cowplot", "hrbrthemes")
+theme_list <- list()
+
+for (pack in theme_packs){
+    get_functions <- lsf.str(paste0("package:",pack))
+    extract_themes <- str_extract_all(get_functions, "^theme_.*", simplify = TRUE)
+    theme_list[[pack]] <- tibble(theme = extract_themes[extract_themes != ""], package = pack)
+}
+
+theme_df <- bind_rows(theme_list) %>%
+    filter(!theme %in% c("", "theme_get", "theme_replace", "theme_set","theme_test","theme_update"))
+```
+
+
+```{r echo=FALSE}
+for(n in 1:nrow(theme_df)){
+    cat(paste0(theme_df$package[n],"::",theme_df$theme[n],"()"))
+    print(p1 + eval(parse(text = paste(theme_df$theme[n],"()" ,sep = "")))
+    )
+}
+
+```
+
+
