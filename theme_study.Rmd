@@ -47,7 +47,7 @@ theme_df <- bind_rows(theme_list) %>%
     filter(!theme %in% c("", "theme_get", "theme_replace", "theme_set","theme_test","theme_update"))
 ```
 
-
+## Themes per Package
 ```{r echo=FALSE}
 for(n in 1:nrow(theme_df)){
     cat(paste0(theme_df$package[n],"::",theme_df$theme[n],"()"))
@@ -56,5 +56,15 @@ for(n in 1:nrow(theme_df)){
 }
 
 ```
+
+## References
+
+["ggplot-themes-gallery"](https://www.datanovia.com/en/blog/ggplot-themes-gallery/)
+["ggplot2 book"](https://ggplot2-book.org/polishing.html)
+["ggplots with ggthemr"](https://www.shanelynn.ie/themes-and-colours-for-r-ggplots-with-ggthemr/)
+["ggthemr palaettes"](https://github.com/cttobin/ggthemr#palettes)
+["hrbrthemes"](https://github.com/hrbrmstr/hrbrthemes)
+["cowplot"](https://wilkelab.org/cowplot/articles/themes.html)
+
 
 
